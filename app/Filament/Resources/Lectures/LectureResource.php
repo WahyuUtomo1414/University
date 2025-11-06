@@ -22,7 +22,7 @@ class LectureResource extends Resource
 {
     protected static ?string $model = Lecture::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserCircle;
 
     protected static ?string $recordTitleAttribute = 'Lecture';
 
