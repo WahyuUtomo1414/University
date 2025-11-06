@@ -13,20 +13,32 @@ class LectureForm
         return $schema
             ->components([
                 TextInput::make('lecture_number')
-                    ->required(),
+                    ->required()
+                    ->label('Lecture Number')
+                    ->default(function () {
+                        // Ambil nomor terakhir dari database
+                        $lastStudent = \App\Models\Lecture::orderBy('id', 'desc')->first();
+
+                        // Tentukan nomor berikutnya
+                        $nextNumber = 1; // default jika belum ada data
+                        if ($lastStudent && $lastStudent->lecture_number) {
+                            // Ambil angka di belakang ST-
+                            $lastNumber = (int) str_replace('LC-', '', $lastStudent->lecture_number);
+                            $nextNumber = $lastNumber + 1;
+                        }
+
+                        // Format jadi ST-000001
+                        return 'LC-' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+                    })
+                    ->columnSpanFull(),
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('phone_number')
                     ->tel()
+                    ->maxLength(16)
                     ->required(),
                 Toggle::make('active')
                     ->required(),
-                TextInput::make('created_by')
-                    ->numeric(),
-                TextInput::make('updated_by')
-                    ->numeric(),
-                TextInput::make('deleted_by')
-                    ->numeric(),
             ]);
     }
 }
